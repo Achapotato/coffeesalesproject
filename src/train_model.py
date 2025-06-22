@@ -10,7 +10,7 @@ import joblib
 # Step 1: Load data
 df = pd.read_csv('data/preprocessed_dataset.csv')
 
-# Step 2: 转换 transaction_hour 为小时整数（自动处理各种格式）
+# Step 2: convert transaction_hour as hour
 from dateutil import parser
 
 def convert_hour_to_float(time_str):
@@ -23,14 +23,14 @@ def convert_hour_to_float(time_str):
 df['transaction_hour'] = df['transaction_hour'].apply(convert_hour_to_float)
 
 
-# Step 3: 打印哪些字段存在缺失值
+# Step 3: check missing value
 print("🔍 Missing values before dropna:")
 print(df[['transaction_qty', 'weekday', 'transaction_hour', 'sales_amount']].isnull().sum())
 
-# Step 4: 删除缺失值
+# Step 4: delete missing value
 df = df.dropna(subset=['transaction_qty', 'weekday', 'transaction_hour', 'sales_amount'])
 
-# Step 5: 再次确认数据是否为空
+# Step 5: check again
 if df.empty:
     print("❌ After dropna, dataframe is empty. Please check input CSV.")
 else:
@@ -59,5 +59,6 @@ else:
     joblib.dump(model, 'model/random_forest_model.pkl')
     print("✅ Model saved to model/random_forest_model.pkl")
 
+df[['transaction_qty', 'weekday', 'transaction_hour', 'sales_amount']].to_csv('data/processed_dataset.csv', index=False)
 
 
