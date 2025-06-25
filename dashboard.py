@@ -38,6 +38,17 @@ filtered_df = df[
     (df['transaction_date'] <= pd.to_datetime(selected_end_date))
 ]
 
+# ---- summary metrics ----
+st.subheader("Summary Metrics (for selected filters)")
+
+total_qty   = int(filtered_df['transaction_qty'].sum())
+total_sales = float(filtered_df['sales_amount'].sum())
+
+col1, col2 = st.columns(2)
+col1.metric("Total Quantity Sold", f"{total_qty:,}")
+col2.metric("Total Sales Amount", f"${total_sales:,.2f}")
+
+
 # --- Visualization 1: Monthly Sales Trend ---
 st.subheader("Monthly Sales Trend")
 monthly_sales = df.set_index('transaction_date').resample('MS')['transaction_qty'].sum()
