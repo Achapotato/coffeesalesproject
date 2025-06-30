@@ -21,8 +21,8 @@ df['transaction_date'] = pd.to_datetime(df['transaction_date'])
 
 # Sidebar filters
 st.sidebar.header("Filters")
-product_categories = df['product_category'].unique()
-locations = df['store_location'].unique()
+product_categories = ['All'] + list(df['product_category'].unique())
+locations = ['All'] + list(df['store_location'].unique())
 date_range = [df['transaction_date'].min(), df['transaction_date'].max()]
 
 selected_category = st.sidebar.selectbox("Select Product Category", product_categories)
@@ -30,13 +30,24 @@ selected_location = st.sidebar.selectbox("Select Store Location", locations)
 selected_start_date = st.sidebar.date_input("Start Date", date_range[0])
 selected_end_date = st.sidebar.date_input("End Date", date_range[1])
 
+
 # Apply filters
-filtered_df = df[
-    (df['product_category'] == selected_category) &
-    (df['store_location'] == selected_location) &
-    (df['transaction_date'] >= pd.to_datetime(selected_start_date)) &
-    (df['transaction_date'] <= pd.to_datetime(selected_end_date))
+filtered_df = df.copy()
+
+# Filter by product category if not 'All'
+if selected_category != 'All':
+    filtered_df = filtered_df[filtered_df['product_category'] == selected_category]
+
+# Filter by store location if not 'All'
+if selected_location != 'All':
+    filtered_df = filtered_df[filtered_df['store_location'] == selected_location]
+
+# Filter by date range
+filtered_df = filtered_df[
+    (filtered_df['transaction_date'] >= pd.to_datetime(selected_start_date)) &
+    (filtered_df['transaction_date'] <= pd.to_datetime(selected_end_date))
 ]
+
 
 # ---- summary metrics ----
 st.subheader("Summary Metrics (for selected filters)")

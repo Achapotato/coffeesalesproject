@@ -10,7 +10,7 @@ model = joblib.load('model/random_forest_model.joblib')
 input_data = {
     'transaction_qty': [2, 3, 5],
     'weekday': [1, 4, 6],
-    'transaction_hour': ['07 AM', '02 PM', '10 AM']  # 字符串形式需转换
+    'transaction_hour': ['07 AM', '02 PM', '10 AM'] 
 }
 
 # build DataFrame
